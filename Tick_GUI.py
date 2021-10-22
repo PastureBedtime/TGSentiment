@@ -1,27 +1,11 @@
-#Begining of Wideband Systems Inc Reference suite
-#Author: Alexander Bosman
-#Start Date Oct 15, 2021
+#Author - PastureBedtime
+#Help from - Major
 #
-#Maybe add in a few buttons? 
-#Like "what do you want to know: How much it costs, how long it takes,
-#weight/size/ etc etc etc
-#
-#an open orders application with add/remove/complete and all info!!!
-#
-#
+
 version = '1.0.1'
 
 from tkinter import *
 import requests
-
-#from InterfaceDictionary import *
-#from info_pool import *
-
-#This gets/retrieves the text entered in box
-#def decode():
-  #  ticker=textentry.get() #collects text
- #   output.delete(0.0, END)
-
 
 def major():
     ticker=textentry.get() #collects text
@@ -44,71 +28,71 @@ def major():
     #)
 
     csp_strike = [s['short_put'] for s in short_puts]
-#print(csp_strike)
+    #print(csp_strike)
     list(csp_strike)
 
     csp_strike_ints = [float(i) for i in csp_strike]
-#print(csp_strike_ints)
+    #print(csp_strike_ints)
 
     csp_total = sum(csp_strike_ints)
     csp_mean = csp_total/len(csp_strike)
-#print(f'Short Put Concensus: {int(csp_mean)}')
+    #print(f'Short Put Concensus: {int(csp_mean)}')
 
-#
-#
-# LONG PUTS
-#
-#
+    #
+    #
+    # LONG PUTS
+    #
+    #
 
     lp_strike = [s['long_put'] for s in long_puts]
-#print(lp_strike)
+    #print(lp_strike)
     list(lp_strike)
 
     lp_strike_ints = [float(i) for i in lp_strike]
-#print(lp_strike_ints)
+    #print(lp_strike_ints)
 
     lp_total = sum(lp_strike_ints)
     lp_mean = lp_total/len(lp_strike)
-#print(f'Long Put Concenus: {int(lp_mean)}')
+    #print(f'Long Put Concenus: {int(lp_mean)}')
 
-#
-#
-# Short Calls
-#
-#
+    #
+    #
+    # Short Calls
+    #
+    #
     cc_strike = [s['short_call'] for s in short_calls]
-#print(cc_strike)
+    #print(cc_strike)
     list(cc_strike)
 
     cc_strike_ints = [float(i) for i in cc_strike]
-#print(cc_strike_ints)
+    #print(cc_strike_ints)
 
     cc_total = sum(cc_strike_ints)
     cc_mean = cc_total/len(cc_strike)
-#print(f'Short call Concenus: {int(cc_mean)}')
+    #print(f'Short call Concenus: {int(cc_mean)}')
 
-#
-#
-#Long Calls
-#
-#
+    #
+    #
+    #Long Calls
+    #
+    #
 
     lc_strike = [s['long_call'] for s in long_calls]
-#print(lp_strike)
+    #print(lp_strike)
     list(lc_strike)
 
     lc_strike_ints = [float(i) for i in lc_strike]
-#print(lp_strike_ints)
+    #print(lp_strike_ints)
 
     lc_total = sum(lc_strike_ints)
     lc_mean = lc_total/len(lc_strike)
-#print(f'Long call Concenus: {int(lc_mean)}')
+    #print(f'Long call Concenus: {int(lc_mean)}')
 
-#
-#
-# Thetagang Price Prediction
-#
-#
+    #
+    #
+    # Thetagang Price Prediction
+    #
+    #
 
     put_side = (csp_mean + lp_mean)/2
     call_side = (cc_mean + lc_mean)/2
@@ -125,15 +109,6 @@ def major():
     show_me = name + spc + lpc + scc + lcc + ter + warn
     output.insert(END, show_me)
     #sentiment()
-
-#def purchase():
- #   entered_text=textentry.get()
- #   output.delete(0,0, END)
- #   try:
-  #      definition = priceis
-  #  except:
-  #      definition = 'Price unavailable'
-  #  output.insert(END, definition)
 
 #Main 
 window = Tk()
