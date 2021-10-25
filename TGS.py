@@ -2,7 +2,7 @@
 #Help from - Major
 #
 
-version = '1.0.2'
+version = '1.0.2a'
 
 from tkinter import *
 import requests
@@ -128,7 +128,7 @@ def major():
 
 #Main 
 window = Tk()
-window.title(f'Thetagang Sentiment v{version}(UNOFFICIAL)')
+window.title(f'Thetagang Sentiment v{version}')
 window.configure(background="black")
 
 #Enter Image below
@@ -159,8 +159,8 @@ Label (window, text='\nIf current stock price is above range(possibly overbought
 Label (window, text='\nIf current stock price is below range(possibly oversold): \nIf Bullish: Cash secured puts and Put Credit Spreads are ideal. \nIf Bearish: Care should be taken, Call Credit Spreads and Covered Calls are ideal.', bg='black', fg='white', font='none 8 bold').grid(row=23,column=0,)
 Label (window, text='\nLow trade volume may be a big factor in range skew.', bg='black', fg='white', font='none 8 bold').grid(row=24,column=0)
 
-#the dictionary
-nomen = major()
+#Below shows all trades, no tickers listed though 
+#nomen = major()
     
 
 #exit function
