@@ -2,15 +2,27 @@
 #Help from - Major
 #
 
-version = '1.0.2a'
+version = '1.1.0'
 
 from tkinter import *
 import requests
+import datetime as dt
+from datetime import timedelta
+import pandas_datareader.data as web
 
 def major():
     ticker=textentry.get() #collects text
     output.delete(0.0, END)
     
+    #ticker price stuff
+    
+    start = dt.datetime.now() - timedelta(days=1)
+    end = dt.datetime.now()
+    df = web.DataReader(ticker, 'yahoo', start, end)
+    dfl = df['Adj Close']
+    dfls = dfl.to_string()
+    
+    #trades api stuff
     
     url = 'https://api.thetagang.com/trades'
     payload = {'ticker': ticker}
@@ -114,21 +126,22 @@ def major():
     
     #def sentiment():
     name=(f'Info found for: {ticker}')
+    lastp=(f'\nLast Closing and Current Price: \n{dfls}')
     bullbear=(f'\nSentiment: {bias()}')
-    ttr=(f'\nTotal Trades Gathered: {totaltrades}')
+    ttr=(f'\n\nTotal Trades Gathered: {totaltrades}')
     spc=(f' \n\nShort Put Concensus:  {int(csp_mean)} | Number of Trades: {int(csp_len)} | Last 5: {ccl5}')
     lpc=(f' \nLong Put Concensus:   {int(lp_mean)} | Number of Trades: {int(lp_len)} | Last 5: {lpl5}')
     scc=(f' \nShort call Concensus: {int(cc_mean)} | Number of Trades: {int(cc_len)} | Last 5: {ccl5}')
     lcc=(f' \nLong call Concensus:  {int(lc_mean)} | Number of Trades: {int(lc_len)} | Last 5: {lcl5}')
     ter=(f' \n\nThetagang Expected Range: {int(put_side)} to {int(call_side)}')
     warn=(f' \n\n\nInformation provided in this tool is not financial advice, and is collected from user input. This input can skew the data unfavorably. Use at own risk.')
-    show_me = name + ttr + bullbear + spc + lpc + scc + lcc + ter + warn
+    show_me = name + lastp + ttr + bullbear + spc + lpc + scc + lcc + ter + warn
     output.insert(END, show_me)
     #sentiment()
 
 #Main 
 window = Tk()
-window.title(f'Thetagang Sentiment v{version}')
+window.title(f'Thetagang Sentiment v{version}    (unofficial)')
 window.configure(background="black")
 
 #Enter Image below
@@ -148,18 +161,18 @@ Button(window, text='Gather Data', width=11, command=major).grid(row=3, column=0
 Label (window, text='\nOutput:', bg='black', fg='white', font='none 12 bold').grid(row=5,column=0,sticky=W)
 
 #output textbox
-output = Text(window, width=100, height=15, wrap=WORD, background='#32CD32')
+output = Text(window, width=100, height=20, wrap=WORD, background='#32CD32')
 output.grid(row=6, column=0, columnspan=2,sticky=W)
 
 #how to use
 
-Label (window, text='\nHow to use:', bg='black', fg='white', font='none 12 bold').grid(row=20,column=0,sticky=W)
+#Label (window, text='\nHow to use:', bg='black', fg='white', font='none 10 bold').grid(row=20,column=0,sticky=W)
 Label (window, text='\nIf current stock price is within range:\nCash Secured Puts, Covered Calls, Put Credit Spreads, and Call Credit Spreads are all ideal', bg='black', fg='white', font='none 8 bold').grid(row=21,column=0,)
 Label (window, text='\nIf current stock price is above range(possibly overbought): \nIf Bullish: Care should be taken, Put Credit Spreads or Cash Secured puts are possible.\nIf bearish: Covered Calls or Call Credit Spreads are ideal.', bg='black', fg='white', font='none 8 bold').grid(row=22,column=0,)
 Label (window, text='\nIf current stock price is below range(possibly oversold): \nIf Bullish: Cash secured puts and Put Credit Spreads are ideal. \nIf Bearish: Care should be taken, Call Credit Spreads and Covered Calls are ideal.', bg='black', fg='white', font='none 8 bold').grid(row=23,column=0,)
 Label (window, text='\nLow trade volume may be a big factor in range skew.', bg='black', fg='white', font='none 8 bold').grid(row=24,column=0)
 
-#Below shows all trades, no tickers listed though 
+
 #nomen = major()
     
 
@@ -170,11 +183,6 @@ def close_window():
 
 #Exit Button
 Button(window, text='Click to terminate', width =18, command=close_window).grid(row=27,column=0)
-
-#exit function
-def close_window():
-    window.destroy()
-    exit()
 
 
 
