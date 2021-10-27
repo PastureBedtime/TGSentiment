@@ -2,12 +2,13 @@
 #Help from - Major
 #
 
-version = '1.1.0'
+version = '1.1.1'
 
 from tkinter import *
 import requests
 import datetime as dt
 from datetime import timedelta
+from matplotlib import style
 import pandas_datareader.data as web
 
 def major():
@@ -15,13 +16,14 @@ def major():
     output.delete(0.0, END)
     
     #ticker price stuff
-    
+    style.use('ggplot')
     start = dt.datetime.now() - timedelta(days=1)
     end = dt.datetime.now()
     df = web.DataReader(ticker, 'yahoo', start, end)
     dfl = df['Adj Close']
     dfls = dfl.to_string()
-    
+    dflsl = list(dfl)
+    #dflsl[1] is the current price
     #trades api stuff
     
     url = 'https://api.thetagang.com/trades'
@@ -123,11 +125,16 @@ def major():
             return 'Bullish'
         else:
             return 'Bearish'
-    
+    def inrange():
+        if int(dflsl[1]) < call_side and int(dflsl[1]) > put_side:
+            return "In range, safe to trade"
+        else: 
+            return "Out of range, use caution"
     #def sentiment():
     name=(f'Info found for: {ticker}')
     lastp=(f'\nLast Closing and Current Price: \n{dfls}')
     bullbear=(f'\nSentiment: {bias()}')
+    rcheck=(f'\nPrice vs Expected Range: {inrange()}')
     ttr=(f'\n\nTotal Trades Gathered: {totaltrades}')
     spc=(f' \n\nShort Put Concensus:  {int(csp_mean)} | Number of Trades: {int(csp_len)} | Last 5: {ccl5}')
     lpc=(f' \nLong Put Concensus:   {int(lp_mean)} | Number of Trades: {int(lp_len)} | Last 5: {lpl5}')
@@ -135,7 +142,7 @@ def major():
     lcc=(f' \nLong call Concensus:  {int(lc_mean)} | Number of Trades: {int(lc_len)} | Last 5: {lcl5}')
     ter=(f' \n\nThetagang Expected Range: {int(put_side)} to {int(call_side)}')
     warn=(f' \n\n\nInformation provided in this tool is not financial advice, and is collected from user input. This input can skew the data unfavorably. Use at own risk.')
-    show_me = name + lastp + ttr + bullbear + spc + lpc + scc + lcc + ter + warn
+    show_me = name + lastp + ttr + bullbear + rcheck + spc + lpc + scc + lcc + ter + warn
     output.insert(END, show_me)
     #sentiment()
 
