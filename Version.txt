@@ -1,0 +1,4 @@
+Version:1.1.1
+Release: Oct 28, 2021
+Notes:
+  -This is going to serve as a functional baseline for the project
