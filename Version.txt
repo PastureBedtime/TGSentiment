@@ -1,3 +1,8 @@
+Version:1.1.2
+Release: Nov 10, 2021
+Notes:
+  -Added average premium for each trade type (long call/put short call/put)
+
 Version:1.1.1
 Release: Oct 28, 2021
 Notes:
