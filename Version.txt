@@ -1,3 +1,11 @@
+Version:1.1.3
+Release: Nov 18, 2021
+Notes:
+  -Added Potential trades; this needs lots of work to pin down strikes and more specific trade types.
+  -Added Safe Naked Strikes; logic for this needs to improve as its quite simple atm. 
+  -Changed 'premium' to 'cost' for long options; shortened 'premium' to 'prem' for short options to keep formatting consistent
+  
+
 Version:1.1.2
 Release: Nov 10, 2021
 Notes:
