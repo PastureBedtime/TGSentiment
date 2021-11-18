@@ -1,8 +1,9 @@
 #Author - PastureBedtime
-#Help from - Major
+#Help from Major on lines 30-34! What a guy
+#
 #
 
-version = '1.1.2'
+version = '1.1.3'
 
 from tkinter import *
 import requests
@@ -24,6 +25,7 @@ def major():
     dfls = dfl.to_string()
     dflsl = list(dfl)
     #dflsl[1] is the current price
+    
     #trades api stuff
     
     url = 'https://api.thetagang.com/trades'
@@ -146,6 +148,9 @@ def major():
 
     put_side = (csp_mean + lp_mean)/2
     call_side = (cc_mean + lc_mean)/2
+    
+
+    # Overall Bias Feature 
     totaltrades = csp_len + cc_len + lp_len + lc_len
     def bias():
         if csp_len + lc_len > cc_len + lp_len:
@@ -157,17 +162,49 @@ def major():
             return "In range, safe to trade"
         else: 
             return "Out of range, use caution"
+    
+    #Reccomended Trades Feature
+   
+    def rangebias():
+        if int(dflsl[1]) < call_side != True and int(dflsl[1]) > put_side != True:
+            return 'Out Of range. Unable to reccomend trades'
+        elif int(dflsl[1]) <= call_side - (call_side*.02):
+            return 'Call Credit Spread, Covered Call, Naked Call, Long Put, Put Debit Spread'
+        elif int(dflsl[1]) >= put_side + (put_side*.02):
+            return 'Put Credit Spread, Cash Secured Put, Naked Put, Long Call, Call Debit Spread'
+        else:
+            return 'No Range Bias'
+    
+    
+    #Specific Sentiment Feature
+    #Safe Short Range Feature
+    
+    def safeput():
+         if bias() == 'Bullish':
+             return put_side - (put_side*.02)
+         else:
+             return putside - (put_side*.04)
+         
+   
+    def safecall():
+        if bias() == 'Bullish':
+            return call_side + (call_side*.02)
+        else:
+            return call_side + (call_side*.04)
+    
+    #
+    
     #def sentiment():
     name=(f'Info found for: {ticker}')
     lastp=(f'\nLast Closing and Current Price: \n{dfls}')
-    bullbear=(f'\nSentiment: {bias()}')
+    bullbear=(f'\nOverall Sentiment: {bias()}')
     rcheck=(f'\nPrice vs Expected Range: {inrange()}')
     ttr=(f'\n\nTotal Trades Gathered: {totaltrades}')
-    spc=(f' \n\nShort Put Concensus:  {int(csp_mean)} | Number of Trades: {int(csp_len)} | AVG Premium: {round(sppf_mean, 2)} | Last 5: {ccl5} ')
-    lpc=(f' \nLong Put Concensus:   {int(lp_mean)} | Number of Trades: {int(lp_len)} | AVG Premium: {round(lppf_mean, 2)} | Last 5: {lpl5}')
-    scc=(f' \nShort call Concensus: {int(cc_mean)} | Number of Trades: {int(cc_len)} | AVG Premium: {round(scpf_mean, 2)}  | Last 5: {ccl5} ')
-    lcc=(f' \nLong call Concensus:  {int(lc_mean)} | Number of Trades: {int(lc_len)} | AVG Premium: {round(lcpf_mean, 2)} | Last 5: {lcl5} ')
-    ter=(f' \n\nThetagang Expected Range: {int(put_side)} to {int(call_side)}')
+    spc=(f' \n\nShort Put Concensus:  {int(csp_mean)} | Number of Trades: {int(csp_len)} | AVG Prem: {round(sppf_mean, 2)} | Last 5: {ccl5} ')
+    lpc=(f' \nLong Put Concensus:   {int(lp_mean)} | Number of Trades: {int(lp_len)} | AVG Cost: {round(lppf_mean, 2)} | Last 5: {lpl5}')
+    scc=(f' \nShort call Concensus: {int(cc_mean)} | Number of Trades: {int(cc_len)} | AVG Prem: {round(scpf_mean, 2)} | Last 5: {ccl5} ')
+    lcc=(f' \nLong call Concensus:  {int(lc_mean)} | Number of Trades: {int(lc_len)} | AVG Cost: {round(lcpf_mean, 2)} | Last 5: {lcl5} ')
+    ter=(f' \n\nThetagang Expected Range: {int(put_side)} to {int(call_side)} \n \nPotential Trades(beta v0.1.0): {rangebias()} \n \nSafe Naked Strikes(beta v0.1.1): Short put strike: {int(safeput())} | Short call strike: {int(safecall())}')
     warn=(f' \n\n\nInformation provided in this tool is not financial advice, and is collected from user input. This input can skew the data unfavorably. Use at own risk.')
     show_me = name + lastp + ttr + bullbear + rcheck + spc + lpc + scc + lcc + ter + warn
     output.insert(END, show_me)
