@@ -5,7 +5,7 @@ Notes:
   -Removed last 5 trades from output, but kept code. Looks much cleaner
   -Removed price vs expected range as it is somewhat redundant
   -Added standard deviation calculations into the mix. This will evolve over time to gather more accurate date. I need to scrape live IV% for this + DTE entry
-  -Revised order of output for easier reading
+  -Revised order of output for easier reading 
 
 Version:1.1.3
 Release: Nov 18, 2021
